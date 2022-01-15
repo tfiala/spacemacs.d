@@ -1043,7 +1043,7 @@ before packages are loaded."
 
   ;; Auto-indent code automatically
   ;; https://emacsredux.com/blog/2016/02/07/auto-indent-your-code-with-aggressive-indent-mode/
-  ;; (add-hook 'clojure-mode-hook #'aggressive-indent-mode)
+  (add-hook 'clojure-mode-hook #'aggressive-indent-mode)
 
   ;; Lookup functions in Clojure - The Essentail Reference book
   ;; https://github.com/p3r7/clojure-essential-ref
@@ -1303,7 +1303,7 @@ before packages are loaded."
   ;; (setq undo-strong-limit 60000000)
   ;;
   ;;
-  ;; disable undo-tree as it seems to be loosing history
+  ;; disable undo-tree as it seems to be losing history
   ;; (global-undo-tree-mode -1)
   ;;
   ;; TODO: try explicitly saving history
@@ -1376,7 +1376,8 @@ before packages are loaded."
   ;;
   ;; tfiala - add user config here
   ;;
-
+  (setq forge-add-default-bindings nil)
+  (setq insert-directory-program "/opt/homebrew/bin/gls")
   )   ;; End of dot-spacemacs/user-config
 
 
