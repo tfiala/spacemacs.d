@@ -2,3 +2,6 @@
 
 # Environment variables are automatically generated
 .spacemacs.env
+
+# Ignore recentf file
+recentf

@@ -441,7 +441,7 @@ It should only modify the values of Spacemacs settings."
    ;; a non-negative integer (pixel size), or a floating-point (point size).
    ;; Point size is recommended, because it's device independent. (default 10.0)
    dotspacemacs-default-font '("Fira Code"
-                               :size 12.0
+                               :size 14.0
                                :weight normal
                                :width normal)
 
@@ -1059,7 +1059,7 @@ before packages are loaded."
       (let* ((point-pos2 (point))
              (cmtstr "#_")
              (cmtstr-len (length cmtstr))
-             (line-start (buffer-substring-no-properties point-pos2 (+ point-pos2 cmtstr-len)))
+
              (point-movement (if (string= cmtstr line-start) -2 2))
              (ending-point-pos (+ point-pos1 point-movement 1)))
         (if (string= cmtstr line-start)
@@ -1289,7 +1289,7 @@ before packages are loaded."
   ;;   (spacemacs/set-leader-keys "k" evil-lisp-state-map))
   ;;
   ;; evil-escape - switch between insert and normal state
-  ;; (setq-default evil-escape-key-sequence "fd")
+  (setq-default evil-escape-key-sequence "jk")
   ;;
   ;; Undo history size limit, triggering garbage collection
   ;; Updating all defaults by a power of 10 (adding another zero at the end)
@@ -1373,9 +1373,37 @@ before packages are loaded."
   ;; end of old-school bindings
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+  ;;
+  ;; tfiala - add user config here
+  ;;
 
   )   ;; End of dot-spacemacs/user-config
 
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
+(defun dotspacemacs/emacs-custom-settings ()
+  "Emacs custom settings.
+This is an auto-generated function, do not modify its content directly, use
+Emacs customize menu instead.
+This function is called at the very end of Spacemacs initialization."
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(evil-want-Y-yank-to-eol nil)
+ '(safe-local-variable-values
+   '((magit-todos-exclude-globs "snippets/*")
+     (javascript-backend . tide)
+     (javascript-backend . tern)
+     (javascript-backend . lsp))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(command-log-command ((t (:foreground "firebrick"))))
+ '(command-log-key ((t (:foreground "dark magenta"))))
+ '(lsp-face-highlight-read ((t (:background nil :weight bold)))))
+)
