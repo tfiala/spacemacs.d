@@ -1377,7 +1377,10 @@ before packages are loaded."
   ;; tfiala - add user config here
   ;;
   (setq forge-add-default-bindings nil)
-  (setq insert-directory-program "/opt/homebrew/bin/gls")
+
+  (when (file-exists-p "/opt/homebrew/bin/gls")
+    (setq insert-directory-program "/opt/homebrew/bin/gls"))
+
   )   ;; End of dot-spacemacs/user-config
 
 
