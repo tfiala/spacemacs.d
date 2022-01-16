@@ -1,6 +1,8 @@
 # Git Ignore patterns for Spacemacs configuration
 
 # Environment variables are automatically generated
+.nrepl-port
+.rebel_readline_history
 .spacemacs.env
 
 # Ignore recentf file
