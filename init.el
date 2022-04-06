@@ -51,8 +51,8 @@ This function should only modify configuration layer settings."
                       auto-completion-enable-help-tooltip t
                       auto-completion-enable-snippets-in-popup t
                       auto-completion-enable-sort-by-usage t
-                      auto-completion-idle-delay 0.0
-                      auto-completion-complete-with-key-sequence "fd"
+                      ;; auto-completion-idle-delay 0.0
+                      ;; auto-completion-complete-with-key-sequence "fd"
                       )
 
      ;; To have auto-completion on as soon as you start typing
@@ -62,8 +62,9 @@ This function should only modify configuration layer settings."
      (clojure :variables
               ;; clojure-backend 'cider               ;; use cider and disable lsp
               ;; clojure-enable-linters 'clj-kondo    ;; clj-kondo included in lsp
+              clojure-enable-kaocha-runner t          ;; enable Kaocha test runner
               cider-repl-display-help-banner nil      ;; disable help banner
-              cider-pprint-fn 'fipp                   ;; fast pretty printing
+              cider-print-fn 'puget                   ;; pretty printing with sorted keys / set values
               clojure-indent-style 'align-arguments
               clojure-align-forms-automatically t
               clojure-toplevel-inside-comment-form t  ;; evaluate expressions in comment as top level
@@ -95,10 +96,6 @@ This function should only modify configuration layer settings."
           git-magit-status-fullscreen t
           magit-diff-refine-hunk t
           git-enable-magit-todos-plugin t)
-
-     ;; SPC g h to use GitHub repositories
-     ;; SPC g g to use GitHub Gists
-     github
 
      ;; graphviz - open-source graph declaration system
      ;; Used to generated graphs of Clojure project dependencies
@@ -282,9 +279,13 @@ It should only modify the values of Spacemacs settings."
   ;; This setq-default sexp is an exhaustive list of all the supported
   ;; spacemacs settings.
   (setq-default
-   ;; If non-nil then enable support for the portable dumper. You'll need
-   ;; to compile Emacs 27 from source following the instructions in file
+   ;; If non-nil then enable support for the portable dumper. You'll need to
+   ;; compile Emacs 27 from source following the instructions in file
    ;; EXPERIMENTAL.org at to root of the git repository.
+   ;;
+   ;; WARNING: pdumper does not work with Native Compilation, so it's disabled
+   ;; regardless of the following setting when native compilation is in effect.
+   ;;
    ;; (default nil)
    dotspacemacs-enable-emacs-pdumper nil
 
@@ -585,8 +586,8 @@ It should only modify the values of Spacemacs settings."
    ;; If set to `t', `relative' or `visual' then line numbers are enabled in all
    ;; `prog-mode' and `text-mode' derivatives. If set to `relative', line
    ;; numbers are relative. If set to `visual', line numbers are also relative,
-   ;; but lines are only visual lines are counted. For example, folded lines
-   ;; will not be counted and wrapped lines are counted as multiple lines.
+   ;; but only visual lines are counted. For example, folded lines will not be
+   ;; counted and wrapped lines are counted as multiple lines.
    ;; This variable can also be set to a property list for finer control:
    ;; '(:relative nil
    ;;   :visual nil
@@ -685,12 +686,15 @@ It should only modify the values of Spacemacs settings."
    ;; (default nil)
    dotspacemacs-whitespace-cleanup 'all
 
-   ;; If non nil activate `clean-aindent-mode' which tries to correct
-   ;; virtual indentation of simple modes. This can interfer with mode specific
+   ;; If non-nil activate `clean-aindent-mode' which tries to correct
+   ;; virtual indentation of simple modes. This can interfere with mode specific
    ;; indent handling like has been reported for `go-mode'.
    ;; If it does deactivate it here.
    ;; (default t)
    dotspacemacs-use-clean-aindent-mode t
+
+   ;; Accept SPC as y for prompts if non-nil. (default nil)
+   dotspacemacs-use-SPC-as-y nil
 
    ;; If non-nil shift your number row to match the entered keyboard layout
    ;; (only in insert state). Currently supported keyboard layouts are:
@@ -709,7 +713,7 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-pretty-docs t
 
    ;; If nil the home buffer shows the full path of agenda items
-   ;; and todos. If non nil only the file name is shown.
+   ;; and todos. If non-nil only the file name is shown.
    dotspacemacs-home-shorten-agenda-source nil
 
    ;; If non-nil then byte-compile some of Spacemacs files.
@@ -911,7 +915,7 @@ before packages are loaded."
   ;; GitHub user and organization accounts owned
   ;; used by @ c f  to create a fork
   (setq forge-owned-accounts
-        '(("practicalli" "jr0cket"
+        '(("practicalli" "practicalli-john"
            "ClojureBridgeLondon" "ldnclj"
            "clojure-hacks"
            "reclojure")))
