@@ -1385,6 +1385,8 @@ before packages are loaded."
   (when (file-exists-p "/opt/homebrew/bin/gls")
     (setq insert-directory-program "/opt/homebrew/bin/gls"))
 
+  ;; always follow symlinks on opening files (i.e. don't prompt)
+  (setq vc-follow-symlinks t)
   )   ;; End of dot-spacemacs/user-config
 
 
