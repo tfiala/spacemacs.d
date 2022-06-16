@@ -112,47 +112,12 @@ This function should only modify configuration layer settings."
      json
 
      ;; Language server protocol with minimal visual impact
-     ;; https://practicalli.github.io/spacemacs/install-spacemacs/clojure-lsp/lsp-variables-reference.html
+     ;; https://practical.li/spacemacs/install-spacemacs/clojure-lsp/
      (lsp :variables
-          ;; Formatting and indentation - use Cider instead
-          lsp-enable-on-type-formatting t
-          ;; Set to nil to use CIDER features instead of LSP UI
-          lsp-enable-indentation t
-          lsp-enable-snippet t  ;; to test again
-
-          ;; symbol highlighting - `lsp-toggle-symbol-highlight` toggles highlighting
-          ;; subtle highlighting for doom-gruvbox-light theme defined in dotspacemacs/user-config
-          lsp-enable-symbol-highlighting t
-
-          ;; Show lint error indicator in the mode line
-          lsp-modeline-diagnostics-enable t
-          ;; lsp-modeline-diagnostics-scope :workspace
-
-          ;; popup documentation boxes
-          ;; lsp-ui-doc-enable nil          ;; disable all doc popups
-          lsp-ui-doc-show-with-cursor nil   ;; doc popup for cursor
-          ;; lsp-ui-doc-show-with-mouse t   ;; doc popup for mouse
-          ;; lsp-ui-doc-delay 2                ;; delay in seconds for popup to display
-          lsp-ui-doc-include-signature t    ;; include function signature
-          ;; lsp-ui-doc-position 'at-point  ;; top bottom at-point
-          lsp-ui-doc-alignment 'window      ;; frame window
-
-          ;; code actions and diagnostics text as right-hand side of buffer
-          lsp-ui-sideline-enable nil
-          lsp-ui-sideline-show-code-actions nil
-          ;; lsp-ui-sideline-delay 500
-
-          ;; lsp-ui-sideline-show-diagnostics nil
-
-          ;; reference count for functions (assume their maybe other lenses in future)
-          lsp-lens-enable t
-
-          ;; Efficient use of space in treemacs-lsp display
-          treemacs-space-between-root-nodes nil
-
-          ;; Optimization for large files
-          lsp-file-watch-threshold 10000
-          lsp-log-io nil)
+          lsp-ui-doc-enable nil       ;; disable all doc popups
+          lsp-ui-sideline-enable nil  ;; disable sideline bar for less distraction
+          treemacs-space-between-root-nodes nil  ;; no spacing in treemacs views
+          )
 
      (markdown :variables
                markdown-live-preview-engine 'vmd)
@@ -368,7 +333,8 @@ It should only modify the values of Spacemacs settings."
    ;; directory. A string value must be a path to an image format supported
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
-   dotspacemacs-startup-banner "~/.spacemacs.d/banners/practicalli-logo.svg"
+   ;; dotspacemacs-startup-banner 'official
+   dotspacemacs-startup-banner (concat dotspacemacs-directory "banners/practicalli-logo.svg")
 
    ;; List of items to show in startup buffer or an association list of
    ;; the form `(list-type . list-size)`. If nil then it is disabled.
@@ -734,6 +700,12 @@ configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
 
+  ;; Save `dotspacemacs/emacs-custom-settings' in a separate file
+  ;; simplifying version control of the Spacemacs configuration file
+  (setq custom-file (file-truename (concat dotspacemacs-directory "emacs-custom-settings.el")))
+  (load custom-file)
+
+
   ;; custom theme modification
   ;; spacemacs - overriding default height of modeline
   ;; doom-gruvbox - subtle lsp symbol highlight
@@ -766,13 +738,6 @@ configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
 
-
-
-  ;; LSP  hacking
-  (setq lsp-ui-sideline-enable nil)
-  ;; (setq lsp-ui-sideline-show-code-actions nil)
-
-  (setq lsp-modeline-diagnostics-scope :workspace)
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Keeping Helm history clean
@@ -831,7 +796,7 @@ before packages are loaded."
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Doom theme settings
-  (setq doom-gruvbox-light-variant "hard")
+  ;; (setq doom-gruvbox-light-variant "hard")
   ;;
   (defun practicalli/setup-custom-doom-modeline ()
     (doom-modeline-set-modeline 'practicalli-modeline 'default))
@@ -839,7 +804,7 @@ before packages are loaded."
   (with-eval-after-load 'doom-modeline
     (doom-modeline-def-modeline 'practicalli-modeline
       '(workspace-name window-number modals persp-name buffer-info matches remote-host vcs)
-      '(misc-info repl lsp))
+      '(misc-info repl lsp buffer-position))
     (practicalli/setup-custom-doom-modeline))
 
   ;; checker = flycheck results (not working)
@@ -881,13 +846,14 @@ before packages are loaded."
   ;; Over-ride Spacemacs defaults
   ;;
   ;; Set new location for file bookmarks, SPC f b
-  ;; Default: ~/.emacs.d/.cache/bookmarks
-  (setq bookmark-default-file "~/.spacemacs.d/bookmarks")
+  ;; Default: SPACEMACSDIR.cache/bookmarks
+  ;; (setq bookmark-default-file (concat dotspacemacs-directory "bookmarks"))
   ;;
   ;; Set new location for recent save files
-  ;; Default: ~/.emacs.d/.cache/recentf
-  (setq recentf-save-file  "~/.spacemacs.d/recentf")
+  ;; Default: SPACEMACSDIR.cache/recentf
+  ;; (setq recentf-save-file (concat dotspacemacs-directory "recentf") )
   ;;
+
   ;; native line numbers taking up lots of space?
   (setq-default display-line-numbers-width nil)
   ;;
@@ -897,13 +863,20 @@ before packages are loaded."
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Magit - forge configuration
   ;;
   ;; Set the files that are searched for writing tokens
   ;; by default ~/.authinfo will be used
   ;; and write a token in unencrypted format
-  (setq auth-sources '("~/.authinfo.gpg"))
+  ;; (setq auth-sources '("~/.authinfo.gpg"))
+
+  ;; Use XDG_CONFIG_HOME location or HOME
+  (setq auth-sources (list
+                      (concat (getenv "XDG_CONFIG_HOME") "/authinfo.gpg")
+                      "~/.authinfo.gpg"))
+
   ;;
   ;; Configure number of topics show, open and closed
   ;; use negative number to toggle the view of closed topics
@@ -955,8 +928,7 @@ before packages are loaded."
   ;; with a number to define how many sub-directories to search
   ;; `SPC g L' - list all Git repositories in the defined paths,
   (setq magit-repository-directories
-        '(("~/.emacs.d"  . 0)
-          ("~/projects/" . 2)))
+        '(("~/projects/" . 2)))
   ;;
   ;; end of version control configuration
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1392,7 +1364,8 @@ before packages are loaded."
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
-(defun dotspacemacs/emacs-custom-settings ()
+
+(if nil (defun dotspacemacs/emacs-custom-settings ()
   "Emacs custom settings.
 This is an auto-generated function, do not modify its content directly, use
 Emacs customize menu instead.
@@ -1416,4 +1389,5 @@ This function is called at the very end of Spacemacs initialization."
  '(command-log-command ((t (:foreground "firebrick"))))
  '(command-log-key ((t (:foreground "dark magenta"))))
  '(lsp-face-highlight-read ((t (:background nil :weight bold)))))
+)
 )

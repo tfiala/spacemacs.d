@@ -4,6 +4,4 @@
 .nrepl-port
 .rebel_readline_history
 .spacemacs.env
-
-# Ignore recentf file
 recentf
