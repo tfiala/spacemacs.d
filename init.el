@@ -80,6 +80,8 @@ This function should only modify configuration layer settings."
      ;; SPC a L displays key and command history in a separate buffer
      command-log
 
+     common-lisp
+
      ;; Tools to work with comma separate values e.g. data science data
      ;; https://develop.spacemacs.org/layers/+lang/csv/README.html
      csv
