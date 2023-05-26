@@ -1361,6 +1361,9 @@ before packages are loaded."
 
   ;; always follow symlinks on opening files (i.e. don't prompt)
   (setq vc-follow-symlinks t)
+
+  ;; common lisp uses safe editing mode
+  (spacemacs/toggle-evil-safe-lisp-structural-editing-on-register-hooks)
   )   ;; End of dot-spacemacs/user-config
 
 
